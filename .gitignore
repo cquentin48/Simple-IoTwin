@@ -1,0 +1,9 @@
+CMakeCache.txt
+CMakeFiles/
+bin/
+_deps/
+*.cmake
+src/tests/tests
+lib/
+out/
+Makefile
