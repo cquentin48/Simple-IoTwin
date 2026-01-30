@@ -7,11 +7,12 @@ add_custom_target(
 
 # Coverage custom command
 add_custom_target(
-    lcov -c -i -d src/libs -o cov_result.info
+    cov_gen lcov -c -i -d ${CMAKE_BINARY_DIR}/src/libs -o cov_result.info
     COMMENT "Generate the coverage report base file"
 )
 
 # Generates HTML page
 add_custom_target(
-    genhtml -o coverage cov_result.info
+    cov_html genhtml -o coverage ${CMAKE_BINARY_DIR}/cov_result.info
+    COMMENT "Generates an HTML base folder for the coverage result"
 )
