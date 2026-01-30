@@ -10,6 +10,8 @@ class IoTwin {
      */
     IoTwin() = default;
 
+    int i = 3;
+
  public:
     IoTwin(IoTwin &other) = delete;
 
@@ -20,5 +22,10 @@ class IoTwin {
      * @returns Class created instance
      */
     static IoTwin& GetInstance();
+
+    /**
+     * Returns i class variable
+     */
+    int getI();
 };
 
