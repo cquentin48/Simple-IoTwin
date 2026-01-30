@@ -30,4 +30,4 @@ set_target_properties(tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_D
 
 # Unit test automatic discovery
 include(GoogleTest)
-gtest_discover_tests(tests)
+gtest_discover_tests(tests XML_OUTPUT_DIR tests_result)

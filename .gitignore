@@ -7,3 +7,5 @@ src/tests/tests
 lib/
 out/
 Makefile
+cov_result.info
+coverage/
