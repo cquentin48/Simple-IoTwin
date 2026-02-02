@@ -2,9 +2,10 @@ import subprocess
 
 sh_coverage_cmd = "lcov --summary cov_result.info"
 ps = subprocess.Popen(sh_coverage_cmd, shell=True, stdout=subprocess.PIPE, stderr = subprocess.STDOUT)
-output = ps.communicate()[0]
+output = str(ps.communicate()[0])
 
 if '\n' in output:
+    
     output = [detail.strip()
               for detail in output.split('\n')
               if detail.strip().startswith('lines')
@@ -18,7 +19,7 @@ else:
 
     print(f"Current coverage percentage : {output}")
 
-    coverage_percentage = float(str(output).replace("b'","").replace("\\n'",""))
+    coverage_percentage = float(output.replace("b'","").replace("\\n'",""))
 
 
 if coverage_percentage > 80.0:
