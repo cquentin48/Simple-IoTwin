@@ -1,0 +1,32 @@
+name: Continuous Integration
+on:
+    push:
+jobs:
+    build-project:
+        name: Build Project
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout Project
+              uses: actions/checkout@v4.2.2
+            - name: Setup cmake
+              uses: jwlawson/actions-setup-cmake@v2
+              with:
+                cmake-version: '3.31.x'
+            - name: Setup LCOV
+              uses: hrishikesh-kadam/setup-lcov@v1
+            - name: Setup CPP compiler
+              id: setup_compiler
+              uses: rlalik/setup-cpp-compiler@master
+              with:
+                compiler: latest
+            - name: Generates the makefile
+              run: |
+                cmake . --DCMAKE_BUILD=Debug -DENABLE_COVERAGE=OFF ;
+                cmake --build .
+            - name: Check for lint errors
+              run: make lint
+            - name: Run unit tests
+              run: |
+                make tests ; ./out/bin/tests
+            - name: Generates coverage
+              run: make cov_gen
