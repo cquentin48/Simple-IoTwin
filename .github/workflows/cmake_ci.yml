@@ -19,6 +19,13 @@ jobs:
               uses: rlalik/setup-cpp-compiler@master
               with:
                 compiler: latest
+            - name: Setup Python
+              uses: actions/setup-python@v1
+            - name: Setup pip with cpplint package
+              uses: BSFish/pip-action@v1
+              with:
+                packages: cpplint
+                extra: --user
             - name: Generates the makefile
               run: |
                 cmake . -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=OFF ;
