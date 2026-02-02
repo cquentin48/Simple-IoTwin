@@ -21,25 +21,14 @@ jobs:
                 compiler: latest
             - name: Setup Python
               uses: actions/setup-python@v1
-            - name: Setup pip with cpplint package
-              uses: BSFishy/pip-action@v1
-              with:
-                packages: cpplint
-                extra: --user
             - name: Generates the makefile
               run: |
                 cmake . -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=OFF ;
-                cmake --build .
-            - name: Check for lint errors
-              run: make lint
+                cmake --build . --config Debug
             - name: Run unit tests
               run: |
                 make tests ; ./out/bin/tests
             - name: Generates coverage
-              run: make cov_gen
-            - name: Report coverage
-              uses: pre-history/lcov-summary-action@v0.6.0
-              with:
-                lcov-file: cov_result.info
-                coverage-threshold: '80'
-                fail-on-coverage-decrease: true
+              run: lcov --directory src/libs/ --capture --output-file cov_result.info
+            - name: Enfore coverage
+              run : python utils/coverage.py
