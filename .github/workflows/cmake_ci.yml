@@ -22,7 +22,7 @@ jobs:
             - name: Setup Python
               uses: actions/setup-python@v1
             - name: Setup pip with cpplint package
-              uses: BSFish/pip-action@v1
+              uses: BSFishy/pip-action@v1
               with:
                 packages: cpplint
                 extra: --user
