@@ -42,4 +42,4 @@ jobs:
               with:
                 coverage-files: cov_result.info
                 minimum-coverage: 90
-                working-directory: src/lib
+                working-directory: src/libs
