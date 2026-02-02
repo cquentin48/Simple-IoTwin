@@ -32,6 +32,7 @@ option(ENABLE_COVERAGE "Enable coverage reporting with LCOV" OFF)
 # Folder for respectively source code (libs) and unit tests (tests)
 add_subdirectory(src/libs)
 add_subdirectory(src/tests)
+add_subdirectory(docs)
 
 # Fetch content for libraries
 include(FetchContent)

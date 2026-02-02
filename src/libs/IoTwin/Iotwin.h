@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- * IoTwin instance
+ * @brief IoTwin instance class
  */
 class IoTwin {
  private:
@@ -18,13 +18,16 @@ class IoTwin {
     void operator=(const IoTwin &) = delete;
 
     /**
-     * Returns created instance. Creates one if not already created
-     * @returns Class created instance
+     * @brief Get the Instance object
+     * 
+     * @return IoTwin& Class instance
      */
     static IoTwin& GetInstance();
 
     /**
-     * Returns i class variable
+     * @brief Returns the i counter
+     * 
+     * @return int i counter
      */
     int getI();
 };
