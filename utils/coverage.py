@@ -1,6 +1,6 @@
 import subprocess
 
-sh_coverage_cmd = "lcov --summary cov_result.info | grep 'lines.......: '"
+sh_coverage_cmd = "lcov --summary cov_result.info"
 ps = subprocess.Popen(sh_coverage_cmd, shell=True, stdout=subprocess.PIPE, stderr = subprocess.STDOUT)
 output = ps.communicate()[0]
 
