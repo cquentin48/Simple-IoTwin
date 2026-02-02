@@ -3,7 +3,7 @@ on:
     push:
 jobs:
     build-project:
-        name: Build Project
+        name: Continuous integration
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout Project
@@ -37,3 +37,9 @@ jobs:
                 make tests ; ./out/bin/tests
             - name: Generates coverage
               run: make cov_gen
+            - name: Report coverage
+              uses: zgosalvez/github-actions-report-lcov@v4
+              with:
+                coverage-files: cov_result.info
+                minimum-coverage: 90
+                working-directory: src/lib
