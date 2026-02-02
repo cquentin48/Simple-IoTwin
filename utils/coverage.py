@@ -4,7 +4,7 @@ sh_coverage_cmd = "lcov --summary cov_result.info"
 ps = subprocess.Popen(sh_coverage_cmd, shell=True, stdout=subprocess.PIPE, stderr = subprocess.STDOUT)
 output = ps.communicate()[0]
 
-if '\n' in lines:
+if '\n' in output:
     output = [detail.strip()
               for detail in output.split('\n')
               if detail.strip().startswith('lines')
