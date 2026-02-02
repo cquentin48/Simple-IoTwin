@@ -1,9 +1,9 @@
 name: Continuous Integration
 on:
-    push:
+    pull_request:
 jobs:
     build-project:
-        name: Continuous integration
+        name: Continuous integration - Unit test code coverage
         runs-on: ubuntu-24.04
         steps:
             - name: Checkout Project
@@ -35,3 +35,11 @@ jobs:
             - name: Run unit tests
               run: |
                 make tests ; ./out/bin/tests
+            - name: Generates coverage
+              run: make cov_gen
+            - name: Report coverage
+              uses: pre-history/lcov-summary-action@v0.6.0
+              with:
+                lcov-file: cov_result.info
+                coverage-threshold: '80'
+                fail-on-coverage-decrease: true
