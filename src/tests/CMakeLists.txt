@@ -12,7 +12,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/lib)
 
 # Includes library GTest and source code
-target_link_libraries(tests PRIVATE arduino_iotwin gtest gtest_main)
+target_link_libraries(tests PRIVATE simple_iotwin gtest gtest_main)
 
 # Include the source files for the unit tests
 target_include_directories(tests PRIVATE

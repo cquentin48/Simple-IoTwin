@@ -12,6 +12,7 @@ if(ARDUINO_SKETCH_PATH)
     )
 endif(ARDUINO_SKETCH_PATH)
 
+
 #System paths
 if(UNIX)
     include(Platform/UnixPaths)
@@ -26,40 +27,51 @@ elseif(WIN32)
     include(Platform/WindowsPaths)
 endif()
 
-function(add_arduino_lib PATH)
-    file(GLOB VERSION_FOLDERS "${PATH}/*")
+#
+# @function add_arduino_lib
+# @brief Add arduino library files from a specify hardware
+# @param[IN] LIB_PATH Hardware root library path
+# @param[OUT] NEW_LIB_FILES New library files to add
+#
+function(add_arduino_lib LIB_PATH NEW_LIB_FILES)
+    file(GLOB VERSION_FOLDERS "${LIB_PATH}/*")
     foreach(VERSION_FOLDER ${VERSION_FOLDERS})
-        file(GLOB VARIANTS "${VERSION_FOLDER}/variants/*")
-        string(REPLACE "/" ";" TYPES ${PATH})
+        set(NEW_VERSION_FILES)
+        file(GLOB VARIANTS
+            "${VERSION_FOLDER}/variants/**/*.h"
+        )
+        list(APPEND NEW_VERSION_FILES ${VARIANTS})
+        string(REPLACE "/" ";" TYPES ${LIB_PATH})
         list(GET TYPES -1 CORE_TYPE)
 
         foreach(VERSION ${CORE_TYPE})
-            SET(library_name Arduino${CORE_TYPE})
-            include_directories(
-                ${CORE_TYPE} STATIC
-                ${VERSION_FOLDER}/libraries
-                ${VERSION_FOLDER}/cores/arduino
+            file(GLOB CORE_FILES
+                "${VERSION_FOLDER}/libraries/**/*.h"
+                "${VERSION_FOLDER}/libraries/**/*.cpp"
+                "${VERSION_FOLDER}/cores/arduino/*"
             )
-            link_directories(${PATH})
-            #target_link_libraries(${CORE_TYPE} PUBLIC sketches)
-            #target_link_libraries(${CORE_TYPE} PUBLIC cxx_std_11)
+            list(APPEND NEW_VERSION_FILES ${CORE_FILES})
         endforeach()
+        list(APPEND NEW_LIB_FILES ${NEW_VERSION_FILES})
     endforeach()
-    
+    set(${NEW_LIB_FILES} ${${NEW_LIB_FILES}} PARENT_SCOPE)
 endfunction()
 
+set(ARDUINO_FILES)
 
 #Arduino SDK
 if(NOT ARDUINO_SDK_PATH)
     set(ARDUINO_SDK_PATH)
-
+    set(ARDUINO_CORE)
     foreach(DETECT_VERSION_MAJOR 1)
         foreach(DETECT_VERSION_MINOR RANGE 5 0)
             set(PATH $ENV{HOME}/.arduino${DETECT_VERSION_MAJOR}${DETECT_VERSION_MINOR})
             if(EXISTS ${PATH})
                 FILE(GLOB SUB_FOLDERS "${PATH}/packages/arduino/hardware/*")
                 foreach(SUB_FOLDER ${SUB_FOLDERS})
-                    add_arduino_lib(${SUB_FOLDER})
+                    set(NEW_LIB_FILES)
+                    add_arduino_lib(${SUB_FOLDER} NEW_LIB_FILES)
+                    list(APPEND ARDUINO_CORE ${NEW_LIB_FILES})
                 endforeach()
             endif()
             list(APPEND ARDUINO_PATHS $ENV{HOME}/.arduino-${DETECT_VERSION_MAJOR}.${DETECT_VERSION_MINOR})
@@ -68,3 +80,33 @@ if(NOT ARDUINO_SDK_PATH)
 else()
     add_arduino_lib(${ARDUINO_SDK_PATH})
 endif()
+
+set(ARDUINO_MCU "atmega328p")
+
+add_library(ArduinoFlags INTERFACE)
+target_compile_options(ArduinoFlags INTERFACE
+    "-fno-exceptions"
+    "-ffunction-sections"
+    "-fdata-sections"
+    "$<$<COMPILE_LANGUAGE:CXX>:-fno-threadsafe-statics>"
+    "-mmcu=${ARDUINO_MCU}"
+)
+
+target_compile_definitions(ArduinoFlags INTERFACE
+    "-F_CPU=${ARDUINO_F_CPU}"
+    "ARDUINO=${ARDUINO_VERSION}"
+    "ARDUINO_${ARDUINO_BOARD}"
+    "ARCUINO_ARCH_AVR"
+)
+
+target_link_options(ArduinoFlags INTERFACE
+    "-mmcu=${ARCUINO_MCU}"
+    "-FUSE-LINKER-PLUGIN"
+    "LINKER:--gc-sections"
+)
+
+target_compile_features(ArduinoFlags INTERFACE cxx_std_11 c_std_11)
+
+add_library(ArduinoCore STATIC ${ARDUINO_CORE})
+target_link_libraries(ArduinoCore PUBLIC ArduinoFlags)
+target_compile_features(ArduinoCore PUBLIC cxx_std_11 c_std_11)

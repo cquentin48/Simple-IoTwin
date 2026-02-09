@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Project name and language
-project(ArduinoIoTwin LANGUAGES CXX)
+project(ArduinoIoTwin LANGUAGES CXX C)
 
 set(CMAKE_PROJECT_VERSION 0.1)
 set(CMAKE_PROJECT_VERSION_MAJOR 0)
@@ -31,9 +31,11 @@ option(ENABLE_COVERAGE "Enable coverage reporting with LCOV" OFF)
 
 # Folder for respectively source code (libs) and unit tests (tests)
 add_subdirectory(src/libs)
-add_subdirectory(src/sketches)
+#add_subdirectory(src/sketches)
 add_subdirectory(src/tests)
 add_subdirectory(docs)
+
+#target_link_libraries(simple_iotwin PUBLIC ArduinoCore)
 
 # Debug messsage
 
