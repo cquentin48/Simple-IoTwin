@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 # Project name and language
-project(ArduinoIoTwin LANGUAGES CXX C)
+project(SimpleIoTwin LANGUAGES CXX C)
 
 set(CMAKE_PROJECT_VERSION 0.1)
 set(CMAKE_PROJECT_VERSION_MAJOR 0)
