@@ -35,8 +35,6 @@ add_subdirectory(src/libs)
 add_subdirectory(src/tests)
 add_subdirectory(docs)
 
-#target_link_libraries(simple_iotwin PUBLIC ArduinoCore)
-
 # Debug messsage
 
 # Fetch content for libraries
