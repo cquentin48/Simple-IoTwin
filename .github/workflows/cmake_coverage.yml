@@ -24,7 +24,7 @@ jobs:
               uses: actions/setup-python@v1
             - name: Generates the makefile
               run: |
-                cmake . -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=OFF ;
+                cmake . -D CMAKE_BUILD_TYPE=Debug -D ENABLE_COVERAGE=OFF ;
                 cmake --build . --config Debug
             - name: Run unit tests
               run: |

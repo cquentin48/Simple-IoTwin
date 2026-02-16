@@ -1,14 +1,21 @@
-set(ARDUINO_CORE_FILES "$ENV{HOME}/.arduino15/packages/arduino/hardware" "ARDUINO CORE FILES")
-set(ARDUINO_SAMD_VERSION "7-2017q4" CACHE FILEPATH "SAMD Compiler version")
-set(ARDUINO_TOOLS_PATH "$ENV{HOME}/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/${ARDUINO_SAMD_VERSION}/bin")
+set(ARDUINO_CORE_FILES "$ENV{HOME}/.arduino15/packages/arduino/hardware")
 
-message(STATUS ${ARDUINO_TOOLS_PATH})
-
+if(BOARD_TYPE)
+    if(BOARD_TYPE STREQUAL "AVR")
+        include(avr.cmake)
+    elseif(BOARD_TYPE STREQUAL "SAMD")
+        include(samd.cmake)
+    else()
+        message(FATAL_ERROR "The cmake option BOARD_TYPE is invalid! Must be AVR for an AVR family board (e.g. Uno) or SAMD for a SAMD family board (e.g. MKR Wifi 1010)!")
+    endif()
+else()
+    message(FATAL_ERROR "Board type option not set!")
+endif()
 
 # Arduino Core
 if(ARDUINO_CORE_FILES)
-    file(GLOB HARDWARES "${ARDUINO_CORE_FILES}/samd")
-    set(ARDUINO_CORE_FILES)
+    string(TOLOWER ${BOARD_TYPE} HARDWARE_FAMILY)
+    file(GLOB HARDWARES "${ARDUINO_CORE_FILES}/${HARDWARE_FAMILY}")
 
     set(LIBRARY_CORE_FOLDERS)
     set(LIBRARY_VARIANT_FOLDERS)
@@ -33,17 +40,6 @@ if(ARDUINO_CORE_FILES)
     target_link_libraries(ArduinoCore PUBLIC ArduinoFlags)
     target_compile_features(ArduinoCore PUBLIC cxx_std_11 c_std_11)
     target_include_directories(ArduinoCore PUBLIC ${LIBRARY_CORE_FOLDERS})
-
-
-    set(CMAKE_SYSTEM_PROCESSOR samd)
-    set(CMAKE_C_COMPILER ${ARDUINO_TOOLS_PATH}/arm-none-eabi-gcc CACHE FILEPATH
-        "Path to gcc compiler" FORCE)
-    set(CMAKE_CXX_COMPILER ${ARDUINO_TOOLS_PATH}/arm-none-eabi-g++ CACHE FILEPATH
-        "Path to g++ compiler" FORCE)
-    set(CMAKE_OBJCOPY ${ARDUINO_TOOLS_PATH}/arm-none-eabi-objcopy CACHE FILEPATH
-        "Path to arm-objcopy" FORCE)
-    set(CMAKE_SIZE ${ARDUINO_TOOLS_PATH}/arm-none-eabi-size CACHE FILEPATH
-        "Path to avr-size" FORCE)
 
     add_library(ArduinoFlags INTERFACE)
     target_compile_options(ArduinoFlags INTERFACE

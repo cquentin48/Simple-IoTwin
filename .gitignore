@@ -3,6 +3,8 @@ CMakeFiles/
 bin/
 _deps/
 *.cmake
+!src/sketches/avr.cmake
+!src/sketches/samd.cmake
 src/tests/tests
 lib/
 out/
