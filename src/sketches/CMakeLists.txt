@@ -51,7 +51,7 @@ set(BOARD_FINDER_PY_SRC_FILE ${PROJECT_SOURCE_DIR}/utils/board_finder.py)
 execute_process(COMMAND ${Python3_EXECUTABLE} ${BOARD_FINDER_PY_SRC_FILE} ${ARDUINO_BOARD} OUTPUT_VARIABLE RESULT WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} RESULT_VARIABLE OUTPUT)
 
 if(${OUTPUT} EQUAL 1)
-    string(FATAL_ERROR "No board found with the name ${ARDUINO_BOARD} in the family ${BOARD_TYPE}!")
+    message(FATAL_ERROR "No board found with the name ${ARDUINO_BOARD} in the family ${BOARD_TYPE}!")
 else()
     string(JSON BOARD_NAME GET ${RESULT} boardName)
     string(JSON F_CPU GET ${RESULT} f_cpu)
