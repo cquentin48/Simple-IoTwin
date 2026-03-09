@@ -1,5 +1,5 @@
 #include "Iotwin.h"
-#include <iostream>
+#include <stdlib.h>
 
 IoTwin& IoTwin::GetInstance() {
     // LCOV_EXCL_START

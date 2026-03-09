@@ -2,8 +2,15 @@
 find_package(Doxygen)
 
 if (DOXYGEN_FOUND)
-    set(DOXYGEN_IN ${CMAKE_CURRENT_BINARY_DIR}/../Doxyfile.in)
-    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/../Doxyfile)
+    SET(DOXYGEN_DIRS
+        ${PROJECT_SOURCE_DIR}/src/libs/IoTwin
+        ${PROJECT_SOURCE_DIR}/docs/src/
+    )
+    string(REPLACE ";" " " DOXYGEN_DIRS_STRS ${DOXYGEN_DIRS})
+    set(DOXYGEN_INPUT_DIRS ${DOXYGEN_DIRS_STR})
+
+    set(DOXYGEN_IN ${PROJECT_SOURCE_DIR}/docs/Doxyfile.in)
+    set(DOXYGEN_OUT ${PROJECT_SOURCE_DIR}/docs/Doxyfile)
 
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
     message(DEBUG "Doxygen build started")

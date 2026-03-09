@@ -2,10 +2,15 @@ CMakeCache.txt
 CMakeFiles/
 bin/
 _deps/
+build/
 *.cmake
+!docs/docs.cmake
+!src/libs/libs.cmake
 !src/sketches/avr.cmake
 !src/sketches/samd.cmake
-src/tests/tests
+!src/sketches/sketches.cmake
+!src/tests/tests.cmake
+!utils/utils.cmake
 lib/
 out/
 Makefile

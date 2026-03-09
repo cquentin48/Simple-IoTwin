@@ -1,33 +1,30 @@
-add_executable(tests)
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 # CPP Unit test files with link to the test lib
 file(GLOB_RECURSE TEST_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/**/*.cpp"
 )
-target_sources(tests PRIVATE ${TEST_SOURCES})
 
-# Sets the output files (both lib and bin) in the out folder
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/lib)
+add_executable(simple_iotwin_tests ${TEST_SOURCES})
 
-# Includes library GTest and source code
-target_link_libraries(tests PRIVATE simple_iotwin gtest gtest_main)
-
-# Include the source files for the unit tests
-target_include_directories(tests PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src/libs>
-)
+target_link_libraries(simple_iotwin_tests GTest:gtest_main)
 
 # Toggles on coverage
 if(ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(tests PRIVATE --coverage -O0 -g -Wno-dev)
     target_link_options(tests PRIVATE --coverage -Wno-dev)
 endif()
+#
 
 # Sets output folder to keep clear folder
-set_target_properties(tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out/bin)
-
-# Unit test automatic discovery
 include(GoogleTest)
-gtest_discover_tests(tests XML_OUTPUT_DIR tests_result)
+gtest_discover_tests(simple_iotwin_tests)
