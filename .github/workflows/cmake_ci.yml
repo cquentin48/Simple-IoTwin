@@ -31,10 +31,10 @@ jobs:
                 extra: --user
             - name: Generates the makefile
               run: |
-                cmake -B build -D ARDUINO_BOARD=uno -D BOARD_TYPE=AVR
+                cmake -B build -D ARDUINO_BOARD=uno -D BOARD_TYPE=AVR ;
                 cmake --build build
             - name: Check for lint errors
-              run: make lint
+              run: cd build && make lint
             - name: Run unit tests
               run: |
                 echo "No test yet! Skipped"
