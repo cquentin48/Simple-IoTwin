@@ -13,6 +13,8 @@ jobs:
               uses: jwlawson/actions-setup-cmake@v2
               with:
                 cmake-version: '3.31.x'
+            - name: Install AVR LibC package
+              run: sudo apt update -y ; sudo apt install avr-libc -y
             - name: Setup LCOV
               uses: hrishikesh-kadam/setup-lcov@v1
             - name: Setup CPP compiler
