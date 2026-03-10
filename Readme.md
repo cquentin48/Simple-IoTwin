@@ -44,3 +44,9 @@ void setup(){
 
 void loop(){}
 ```
+
+
+## Special thanks
+
+- Arduino for the board families AVR and SAMD
+- [oudeis01](https://github.com/oudeis01) for his project [arduino cmake](https://github.com/oudeis01/arduino-cmake) which helped me understand how to integrate arduino board with cmake
